@@ -8,7 +8,7 @@
         <div class="todo-wrap">
           <bc :addTodo="addTodo" />
           <dc :to="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
-          <ac :todos="todos" :checkAllTodo ="checkAllTodo"/>
+          <ac :todos="todos" :checkAllTodo ="checkAllTodo" :clearAllTodo="clearAllTodo"/>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@ export default {
     ac,
     bc,
     cc,
-    dc,
+    dc
   },
   methods: {
     addTodo(todoObj) {
@@ -57,6 +57,11 @@ export default {
     checkAllTodo(done){
       this.todos.forEach((todo)=>{
         todo.done = done
+      })
+    },
+    clearAllTodo(){
+     this.todos = this.todos.filter((todo)=>{
+        return !todo.done
       })
     }
   },
