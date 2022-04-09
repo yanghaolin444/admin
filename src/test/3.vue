@@ -8,9 +8,16 @@
       />
       <!-- 如下代码也能实现功能，但是不太推荐，因为有点违反原则，因为修改了props -->
       <!-- <input type="checkbox" v-model="todo.done"/> -->
-      <span>{{ todo.title }}</span>
+      <span v-show="!todo.isEdit">{{ todo.title }}</span>
+      <input
+        v-show="todo.isEdit"
+        type="text"
+        :value="todo.title"
+        @blur="handleBlur(todo)"
+      />
     </label>
     <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+    <button class="btn btn-danger" @click="handleEdit(todo)">编辑</button>
   </li>
 </template>
 <script>
@@ -23,6 +30,16 @@ export default {
       if (confirm("确定要删除吗？")) {
         this.deleteTodo(id);
       }
+    },
+    handleEdit(todo) {
+      if (todo.hasOwnProperty("isEdit")) {
+        todo.isEdit = true;
+      } else {
+        this.$set(todo, "isEdit", true);
+      }
+    },
+    handleBlur(todo) {
+      todo.isEdit = false;
     },
   },
   props: ["todo", "checkTodo", "deleteTodo"],

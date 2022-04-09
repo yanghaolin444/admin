@@ -12,7 +12,7 @@
 </template>
 <script>
 export default {
-  props: ["todos", "checkAllTodo", "clearAllTodo"],
+  props: ["todos"],
   computed: {
     total() {
       return this.todos.length;
@@ -28,7 +28,7 @@ export default {
         return this.doneTotal === this.total;
       },
       set(value) {
-        this.checkAllTodo(value);
+        this.$bus.$emit("checkAllTodo", value);
       },
     },
   },
@@ -38,7 +38,7 @@ export default {
     // }
     clearAll() {
       if (confirm("你确定要删除吗？")) {
-        this.clearAllTodo();
+        this.$bus.$emit("clearAllTodo");
       }
     },
   },

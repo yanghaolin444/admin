@@ -6,9 +6,9 @@
     <div id="root">
       <div class="todo-container">
         <div class="todo-wrap">
-          <bc :addTodo="addTodo" />
+          <bc @addTodo="addTodo" />
           <dc :to="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo" />
-          <ac :todos="todos" :checkAllTodo ="checkAllTodo" :clearAllTodo="clearAllTodo"/>
+          <ac :todos="todos" />
         </div>
       </div>
     </div>
@@ -25,11 +25,7 @@ import dc from "./test/4.vue";
 export default {
   data() {
     return {
-      todos: [
-        { id: "0001", title: "抽烟", done: true },
-        { id: "0002", title: "喝酒", done: false },
-        { id: "0003", title: "烫头", done: true },
-      ],
+      todos: JSON.parse(localStorage.getItem("todos")) || [],
     };
   },
   components: {
@@ -38,7 +34,7 @@ export default {
     ac,
     bc,
     cc,
-    dc
+    dc,
   },
   methods: {
     addTodo(todoObj) {
@@ -54,16 +50,28 @@ export default {
         return item.id !== id;
       });
     },
-    checkAllTodo(done){
-      this.todos.forEach((todo)=>{
-        todo.done = done
-      })
+    checkAllTodo(done) {
+      this.todos.forEach((todo) => {
+        todo.done = done;
+      });
     },
-    clearAllTodo(){
-     this.todos = this.todos.filter((todo)=>{
-        return !todo.done
-      })
-    }
+    clearAllTodo() {
+      this.todos = this.todos.filter((todo) => {
+        return !todo.done;
+      });
+    },
+  },
+  watch: {
+    todos: {
+      deep: true,
+      handler(value) {
+        localStorage.setItem("todos", JSON.stringify(value));
+      },
+    },
+  },
+  mounted() {
+    this.$bus.$on("checkAllTodo", this.checkAllTodo);
+    this.$bus.$on("clearAllTodo", this.clearAllTodo);
   },
 };
 </script>
